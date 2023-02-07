@@ -15,7 +15,7 @@ This repository is used for our team to synchronous progress
 pip install -r requriements.txt
 ```
 
-
+> 注意关闭vpn
 
 
 
