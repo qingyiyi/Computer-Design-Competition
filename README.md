@@ -9,7 +9,33 @@ This repository is used for our team to synchronous progress
 
 ## 使用方法
 
-下载好该包后，进入目录中，选择好运行环境并运行以下命令即可
+下载好该包后，需要安装ffmpeg命令
+
+> Windows系统如下安装
+>
+> 以管理员身份打开powershell，并运行以下命令
+>
+> ```
+> Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+> ```
+>
+> 接着在cmd中输入以下命令
+>
+> ```
+> choco install ffmpeg
+> ```
+
+
+
+> Linux系统如下安装
+>
+> ```shell
+> sudo apt update && sudo apt install ffmpeg
+> ```
+
+
+
+进入项目目录中，选择好运行环境并运行以下命令即可
 
 ```
 pip install -r requriements.txt
