@@ -37,7 +37,7 @@ class voice:
         wf.close()
 
     def convert(self,Path):
-        model = whisper.load_model("base")
+        model = whisper.load_model("small")
         result = model.transcribe("audio.wav")
         return result["text"]
         
