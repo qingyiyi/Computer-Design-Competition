@@ -43,7 +43,7 @@ class voice:
         
     def chat(text):
         # Set your API key
-        openai.api_key = "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"
+        openai.api_key = ""
         # Use the GPT-3 model
         completion = openai.Completion.create(
             engine="text-davinci-002",
