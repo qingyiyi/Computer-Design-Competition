@@ -46,12 +46,6 @@ def hand_angle(hand_):
          ((int(hand_[3][0])- int(hand_[4][0])), (int(hand_[3][1])- int(hand_[4][1])), (int(hand_[3][2])- int(hand_[4][2])))
          ))
     Thread_list.append(p1)
-    # angle_ = vector_3d_angle(
-        # ((int(hand_[0][0])- int(hand_[2][0])), (int(hand_[0][1])- int(hand_[2][1])), (int(hand_[0][2])- int(hand_[2][2]))),
-        # ((int(hand_[3][0])- int(hand_[4][0])), (int(hand_[3][1])- int(hand_[4][1])), (int(hand_[3][2])- int(hand_[4][2])))
-        # )
-    # angle_list.append(abs(angle_))
-
 
     #---------------------------- index 食指角度
     p2 = threading.Thread(name = 'p2', target=vector_3d_angle, args=(
@@ -60,12 +54,6 @@ def hand_angle(hand_):
         ((int(hand_[7][0])- int(hand_[8][0])), (int(hand_[7][1])- int(hand_[8][1])), (int(hand_[7][2])- int(hand_[8][2])))
         ))
     Thread_list.append(p2)
-    # angle_ = vector_3d_angle(
-    #     ((int(hand_[0][0])- int(hand_[5][0])), (int(hand_[0][1])- int(hand_[5][1])), (int(hand_[0][2])- int(hand_[5][2]))),
-    #     ((int(hand_[7][0])- int(hand_[8][0])), (int(hand_[7][1])- int(hand_[8][1])), (int(hand_[7][2])- int(hand_[8][2])))
-    #     )
-    # angle_list.append(abs(angle_))
-
 
     #---------------------------- middle 中指角度
     p3 = threading.Thread(name = 'p3', target=vector_3d_angle, args=(
@@ -74,12 +62,6 @@ def hand_angle(hand_):
         ((int(hand_[11][0])- int(hand_[12][0])), (int(hand_[11][1])- int(hand_[12][1])), (int(hand_[11][2])- int(hand_[12][2])))
         ))
     Thread_list.append(p3)
-    # angle_ = vector_3d_angle(
-    #     ((int(hand_[0][0])- int(hand_[9][0])), (int(hand_[0][1])- int(hand_[9][1])), (int(hand_[0][2])- int(hand_[9][2]))),
-    #     ((int(hand_[11][0])- int(hand_[12][0])), (int(hand_[11][1])- int(hand_[12][1])), (int(hand_[11][2])- int(hand_[12][2])))
-    #     )
-    # angle_list.append(abs(angle_))
-
 
     #---------------------------- ring 无名指角度
     p4 = threading.Thread(name = 'p4', target=vector_3d_angle, args=(
@@ -88,12 +70,6 @@ def hand_angle(hand_):
         ((int(hand_[13][0])- int(hand_[16][0])),(int(hand_[13][1])- int(hand_[16][1])), (int(hand_[13][2])- int(hand_[16][2])))
         ))
     Thread_list.append(p4)
-    # angle_ = vector_3d_angle(
-    #     ((int(hand_[0][0])- int(hand_[13][0])), (int(hand_[0][1])- int(hand_[13][1])), (int(hand_[0][2])- int(hand_[13][2]))),
-    #     ((int(hand_[13][0])- int(hand_[16][0])),(int(hand_[13][1])- int(hand_[16][1])), (int(hand_[13][2])- int(hand_[16][2])))
-    #     )
-    # angle_list.append(abs(angle_))
-
 
     #---------------------------- pink 小拇指角度
     p5 = threading.Thread(name = 'p5', target=vector_3d_angle, args=(
@@ -102,12 +78,6 @@ def hand_angle(hand_):
         ((int(hand_[17][0])- int(hand_[20][0])),(int(hand_[17][1])- int(hand_[20][1])), (int(hand_[17][2])- int(hand_[20][2])))
         ))
     Thread_list.append(p5)
-    # angle_ = vector_3d_angle(
-    #     ((int(hand_[0][0])- int(hand_[17][0])),(int(hand_[0][1])- int(hand_[17][1])), (int(hand_[0][2])- int(hand_[17][2]))),
-    #     ((int(hand_[17][0])- int(hand_[20][0])),(int(hand_[17][1])- int(hand_[20][1])), (int(hand_[17][2])- int(hand_[20][2])))
-    #     )
-    # angle_list.append(abs(angle_))
-    
     for thread in Thread_list:
         thread.start()
     for thread in Thread_list:
@@ -222,3 +192,37 @@ def detect():
             break
     cv2.destroyAllWindows()
     cap.release()
+
+def detect_hand(frame):
+    if len(frame) != 0:
+        mp_drawing = mp.solutions.drawing_utils
+        mp_hands = mp.solutions.hands
+        hands = mp_hands.Hands(
+                static_image_mode=False,
+                max_num_hands=1,
+                min_detection_confidence=0.5,
+                min_tracking_confidence=0.5)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)   #改变颜色空间
+        frame= cv2.flip(frame,1)              #图片水平镜像翻转
+        results = hands.process(frame)        #检测手
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)   #转换回去
+        gesture_str = None
+        if results.multi_hand_landmarks:    #检测到手
+            for hand_landmarks in results.multi_hand_landmarks:      
+                mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)   #绘制图像
+                hand_local = [0] * 22      
+                tthread_list = []
+                t1 = threading.Thread(name = 't1', target = hand_coordinate, args=(hand_local, hand_landmarks, frame))
+                tthread_list.append(t1)
+                t2 = threading.Thread(name = 't2', target = hand_coordinate, args=(hand_local, hand_landmarks, frame))
+                tthread_list.append(t2)
+                t3 = threading.Thread(name = 't3', target = hand_coordinate, args=(hand_local, hand_landmarks, frame))
+                tthread_list.append(t3)
+                for tthread in tthread_list:
+                    tthread.start()
+                for tthread in tthread_list:
+                    tthread.join()
+                if hand_local:
+                    angle_list = hand_angle(hand_local)
+                    gesture_str = h_gesture(angle_list)
+        return gesture_str

@@ -42,6 +42,8 @@ pip install -r requriements.txt
 ```
 
 > 注意关闭vpn
+>
+> 笔者使用python版本是3.9
 
 
 
