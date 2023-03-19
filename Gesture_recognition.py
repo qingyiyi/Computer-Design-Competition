@@ -154,7 +154,7 @@ def detect():
             max_num_hands=1,
             min_detection_confidence=0.5,
             min_tracking_confidence=0.5)
-    cap = cv2.VideoCapture(0)
+    cap =cv2.VideoCapture(0,cv2.CAP_DSHOW)
     while True:
         ret,frame = cap.read()   #返回ret是bool值代表是否截取到，frame是截取的这一帧
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)   #改变颜色空间
@@ -188,10 +188,10 @@ def detect():
                     mouse_control(gesture_str, [hand_landmarks.landmark[9].x,hand_landmarks.landmark[9].y])
                     cv2.putText(frame,gesture_str,(0,100),0,1.3,(0,0,255),3)
         cv2.imshow('MediaPipe Hands', frame)
-        if cv2.waitKey(1) & 0xFF == 27:
-            break
-    cv2.destroyAllWindows()
-    cap.release()
+        if cv2.waitKey(1) & 0xFF == 27:     
+            cv2.destroyAllWindows()
+            cap.release()
+            return
 
 def detect_hand(frame):
     if len(frame) != 0:

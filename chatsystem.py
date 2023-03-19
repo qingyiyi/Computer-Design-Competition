@@ -18,7 +18,7 @@ def Monitor_MIC(th, filename):
                     frames_per_buffer=CHUNK)
     frames = []
     while (True):
-        for i in range(0, 10):
+        for i in range(0, 20):
             data = stream.read(CHUNK)
             frames.append(data)
         audio_data = np.fromstring(data, dtype=np.short)
@@ -38,8 +38,8 @@ def Monitor_MIC(th, filename):
                 if temp2 < th:
                     less.append(-1)
                     print("below threshold, counting: ", less)
-                    #如果有连续5个循环的点，都不是声音信号，就认为音频结束了
-                    if len(less) == 5:
+                    #如果有连续4个循环的点，都不是声音信号，就认为音频结束了
+                    if len(less) == 4:
                         break
                 else:
                     less = []
@@ -58,7 +58,7 @@ def Monitor_MIC(th, filename):
 
 def convert(Path,model):
     m = whisper.load_model(model)
-    return m.transcribe(Path)
+    return m.transcribe(Path)['text']
 
 def chat(text):
         # Set your API key
